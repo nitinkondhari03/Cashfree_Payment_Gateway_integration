@@ -30,37 +30,42 @@ app.get("/", (req, res) => {
 app.get("/payment", async (req, res) => {
   try {
     let request = {
-      "order_amount": 1.0,
-      "order_currency": "INR",
-      "order_id": await generatOrderId(),
-      "customer_details": {
-        "customer_id": "nitin193949",
-        "customer_phone": "9999999999",
-        "customer_name": "nitin",
-        "customer_email": "nitinkondhari85@gmail.com",
+      order_amount: 200.0,
+      order_currency: "INR",
+      order_id: await generatOrderId(),
+      customer_details: {
+        customer_id: "nitin193949",
+        customer_phone: "9999999999",
+        customer_name: "nitin",
+        customer_email: "nitinkondhari85@gmail.com",
       },
     };
-    Cashfree.PGCreateOrder("2023-08-01", request).then((response) => {
-     console.log(response.data);
-      res.json(response.data)
-    }).catch(error=>{
-      console.log(error.response.data.message)
-    });
+    Cashfree.PGCreateOrder("2023-08-01", request)
+      .then((response) => {
+        console.log(response.data);
+        res.json(response.data);
+      })
+      .catch((error) => {
+        console.log(error.response.data.message);
+      });
   } catch (error) {
     console.log(error);
   }
 });
 app.post("/verify", (req, res) => {
-      try {
-            let {orderId}=req.body;
-            Cashfree.PGOrderFetchPayments("2023-08-01",orderId).then((response)=>{
-              res.json(response.data)
-            }).catch((error)=>{
-                  console.log(error)
-            })
-      } catch (error) {
-           console.log(error) 
-      }
+  try {
+    let { orderId } = req.body;
+    Cashfree.PGOrderFetchPayments("2023-08-01", orderId)
+      .then((response) => {
+        res.json(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  } catch (error) {
+    console.log(error);
+  }
 });
 app.listen(8080, () => {
   console.log("Server run posrt at 8080");
